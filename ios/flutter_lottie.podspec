@@ -13,8 +13,8 @@ Pod::Spec.new do |s|
   s.source_files = 'Classes/**/*'
   s.public_header_files = 'Classes/**/*.h'
   s.dependency 'Flutter'
-  s.dependency 'lottie-ios'
+  s.dependency 'lottie-ios', '~>3.0.6'
 
-  s.ios.deployment_target = '8.0'
+  s.ios.deployment_target = '10.0'
 end
 
