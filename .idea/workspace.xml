@@ -2,54 +2,12 @@
 <project version="4">
   <component name="ChangeListManager">
     <list default="true" id="1e20364c-74a7-450f-9f4d-f6b48a3f951d" name="Default Changelist" comment="">
-      <change afterPath="$PROJECT_DIR$/example/animations/splash_screen/data.json" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/example/animations/splash_screen/images/img_0.png" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/example/animations/splash_screen/images/img_1.png" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/example/animations/splash_screen/images/img_2.png" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/example/animations/splash_screen/images/img_3.png" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/example/animations/splash_screen/images/img_4.png" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/example/animations/splash_screen/images/img_5.png" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/example/animations/splash_screen/images/img_6.png" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/example/animations/splash_screen/images/img_7.png" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/example/ios/.symlinks/plugins/flutter_lottie/example/animations/splash_screen/data.json" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/example/ios/.symlinks/plugins/flutter_lottie/example/animations/splash_screen/images/img_0.png" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/example/ios/.symlinks/plugins/flutter_lottie/example/animations/splash_screen/images/img_1.png" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/example/ios/.symlinks/plugins/flutter_lottie/example/animations/splash_screen/images/img_2.png" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/example/ios/.symlinks/plugins/flutter_lottie/example/animations/splash_screen/images/img_3.png" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/example/ios/.symlinks/plugins/flutter_lottie/example/animations/splash_screen/images/img_4.png" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/example/ios/.symlinks/plugins/flutter_lottie/example/animations/splash_screen/images/img_5.png" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/example/ios/.symlinks/plugins/flutter_lottie/example/animations/splash_screen/images/img_6.png" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/example/ios/.symlinks/plugins/flutter_lottie/example/animations/splash_screen/images/img_7.png" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/libraries/Dart_SDK.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/libraries/Dart_SDK.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/runConfigurations/example_lib_main_dart.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/runConfigurations/example_lib_main_dart.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/example/ios/.symlinks/plugins/flutter_lottie/.idea/libraries/Dart_SDK.xml" beforeDir="false" afterPath="$PROJECT_DIR$/example/ios/.symlinks/plugins/flutter_lottie/.idea/libraries/Dart_SDK.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/example/ios/.symlinks/plugins/flutter_lottie/.idea/runConfigurations/example_lib_main_dart.xml" beforeDir="false" afterPath="$PROJECT_DIR$/example/ios/.symlinks/plugins/flutter_lottie/.idea/runConfigurations/example_lib_main_dart.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/example/ios/.symlinks/plugins/flutter_lottie/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/example/ios/.symlinks/plugins/flutter_lottie/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/example/ios/.symlinks/plugins/flutter_lottie/example/ios/Podfile.lock" beforeDir="false" afterPath="$PROJECT_DIR$/example/ios/.symlinks/plugins/flutter_lottie/example/ios/Podfile.lock" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/example/ios/.symlinks/plugins/flutter_lottie/example/ios/Runner.xcodeproj/project.pbxproj" beforeDir="false" afterPath="$PROJECT_DIR$/example/ios/.symlinks/plugins/flutter_lottie/example/ios/Runner.xcodeproj/project.pbxproj" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/example/ios/.symlinks/plugins/flutter_lottie/example/lib/main.dart" beforeDir="false" afterPath="$PROJECT_DIR$/example/ios/.symlinks/plugins/flutter_lottie/example/lib/main.dart" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/example/ios/.symlinks/plugins/flutter_lottie/example/pubspec.yaml" beforeDir="false" afterPath="$PROJECT_DIR$/example/ios/.symlinks/plugins/flutter_lottie/example/pubspec.yaml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/example/ios/.symlinks/plugins/flutter_lottie/flutter_lottie.iml" beforeDir="false" afterPath="$PROJECT_DIR$/example/ios/.symlinks/plugins/flutter_lottie/flutter_lottie.iml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/example/ios/.symlinks/plugins/flutter_lottie/ios/Classes/LottieView.swift" beforeDir="false" afterPath="$PROJECT_DIR$/example/ios/.symlinks/plugins/flutter_lottie/ios/Classes/LottieView.swift" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/example/ios/.symlinks/plugins/flutter_lottie/ios/Classes/helpers.swift" beforeDir="false" afterPath="$PROJECT_DIR$/example/ios/.symlinks/plugins/flutter_lottie/ios/Classes/helpers.swift" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/example/ios/.symlinks/plugins/flutter_lottie/lib/src/lotvalues/lot_color_value.dart" beforeDir="false" afterPath="$PROJECT_DIR$/example/ios/.symlinks/plugins/flutter_lottie/lib/src/lotvalues/lot_color_value.dart" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/example/ios/.symlinks/plugins/flutter_lottie/lib/src/lotvalues/lot_opacity_value.dart" beforeDir="false" afterPath="$PROJECT_DIR$/example/ios/.symlinks/plugins/flutter_lottie/lib/src/lotvalues/lot_opacity_value.dart" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/example/ios/.symlinks/plugins/flutter_lottie/pubspec.lock" beforeDir="false" afterPath="$PROJECT_DIR$/example/ios/.symlinks/plugins/flutter_lottie/pubspec.lock" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/example/ios/Podfile.lock" beforeDir="false" afterPath="$PROJECT_DIR$/example/ios/Podfile.lock" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/example/ios/Runner.xcodeproj/project.pbxproj" beforeDir="false" afterPath="$PROJECT_DIR$/example/ios/Runner.xcodeproj/project.pbxproj" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/example/lib/main.dart" beforeDir="false" afterPath="$PROJECT_DIR$/example/lib/main.dart" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/example/pubspec.lock" beforeDir="false" afterPath="$PROJECT_DIR$/example/pubspec.lock" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/example/pubspec.yaml" beforeDir="false" afterPath="$PROJECT_DIR$/example/pubspec.yaml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/flutter_lottie.iml" beforeDir="false" afterPath="$PROJECT_DIR$/flutter_lottie.iml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/ios/Classes/LottieView.swift" beforeDir="false" afterPath="$PROJECT_DIR$/ios/Classes/LottieView.swift" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/ios/Classes/helpers.swift" beforeDir="false" afterPath="$PROJECT_DIR$/ios/Classes/helpers.swift" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/lib/src/lottie_controller.dart" beforeDir="false" afterPath="$PROJECT_DIR$/lib/src/lottie_controller.dart" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/lib/src/lottie_view.dart" beforeDir="false" afterPath="$PROJECT_DIR$/lib/src/lottie_view.dart" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/lib/src/lotvalues/lot_color_value.dart" beforeDir="false" afterPath="$PROJECT_DIR$/lib/src/lotvalues/lot_color_value.dart" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/lib/src/lotvalues/lot_opacity_value.dart" beforeDir="false" afterPath="$PROJECT_DIR$/lib/src/lotvalues/lot_opacity_value.dart" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/pubspec.lock" beforeDir="false" afterPath="$PROJECT_DIR$/pubspec.lock" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/test/flutter_lottie_test.dart" beforeDir="false" afterPath="$PROJECT_DIR$/test/flutter_lottie_test.dart" afterDir="false" />
     </list>
     <option name="EXCLUDED_CONVERTED_TO_IGNORED" value="true" />
     <option name="SHOW_DIALOG" value="false" />
@@ -141,5 +99,9 @@
         </entry>
       </map>
     </option>
+  </component>
+  <component name="VcsManagerConfiguration">
+    <MESSAGE value="Tweaking controller" />
+    <option name="LAST_COMMIT_MESSAGE" value="Tweaking controller" />
   </component>
 </project>

@@ -109,6 +109,19 @@ class _MyAppState extends State<MyApp> {
                   },
                 ),
                 Text("Drag anywhere to change animation progress"),
+                Text("Autoplay From URL"),
+                Container(
+                  child: SizedBox(
+                    width: 150,
+                    height: 150,
+                    child: LottieView.fromURL(
+                      "https://assets1.lottiefiles.com/packages/lf20_ld8FMO.json",
+                      autoPlay: true,
+                      loop: false,
+                      reverse: false,
+                    ),
+                  ),
+                ),
               ],
             ),
           ),

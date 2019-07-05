@@ -26,35 +26,20 @@ public class LottieView : NSObject, FlutterPlatformView {
     }
     
     func create(args: Any?) {
-        
-        let channel : FlutterMethodChannel = FlutterMethodChannel.init(name: "convictiontech/flutter_lottie_" + String(viewId), binaryMessenger: self.registrarInstance.messenger())
-        let handler : FlutterMethodCallHandler = methodCall;
+    
+        let channel : FlutterMethodChannel = FlutterMethodChannel.init(
+            name: "convictiontech/flutter_lottie_" + String(viewId),
+            binaryMessenger: self.registrarInstance.messenger())
+        let handler = methodCall;
         channel.setMethodCallHandler(handler)
         
         let testChannel = FlutterEventChannel(name: "convictiontech/flutter_lottie_stream_playfinish_"  + String(viewId), binaryMessenger: self.registrarInstance.messenger())
         self.testStream  = TestStreamHandler()
         testChannel.setStreamHandler(testStream as? FlutterStreamHandler & NSObjectProtocol)
         
-        
         if let argsDict = args as? Dictionary<String, Any> {
             let url = argsDict["url"] as? String ?? nil;
             let filePath = argsDict["filePath"] as? String ?? nil;
-            
-            if url != nil {
-                //TODO: figure out imageProvider
-                let jsonURL = URL(string: url!)!
-                self.animationView = AnimationView(url: jsonURL,
-                                                   imageProvider: DownloadImageProvider(baseUrl: jsonURL.deletingLastPathComponent()),
-                                                   closure: {bool in return})
-            }
-            
-            if filePath != nil {
-                print("THIS IS THE ID " + String(viewId) + " " + filePath!)
-                let key = self.registrarInstance.lookupKey(forAsset: filePath!)
-                let path = Bundle.main.path(forResource: key, ofType: nil)
-                self.animationView = AnimationView(filePath: path!)
-            }
-            
             let loop = argsDict["loop"] as? Bool ?? false
             let reverse = argsDict["reverse"] as? Bool ?? false
             let autoPlay = argsDict["autoPlay"] as? Bool ?? false
@@ -67,12 +52,32 @@ public class LottieView : NSObject, FlutterPlatformView {
                 self.loopMode = .playOnce
             }
             
-            // Couldn't find anything to match this
             self.onCompletion = completionBlock
-            self.animationView.loopMode = self.loopMode
-            if autoPlay {
-                self.animationView.play(completion: completionBlock)
+            
+            if url != nil {
+                //TODO: figure out imageProvider
+                let jsonURL = URL(string: url!)!
+                self.animationView = AnimationView(
+                    url: jsonURL,
+                    imageProvider: DownloadImageProvider(baseUrl:   jsonURL.deletingLastPathComponent()),
+                    closure: {bool in
+                        if autoPlay {
+                            self.animationView.play(completion: self.completionBlock)
+                        }
+                })
             }
+            
+            if filePath != nil {
+                print("THIS IS THE ID " + String(viewId) + " " + filePath!)
+                let key = self.registrarInstance.lookupKey(forAsset: filePath!)
+                let path = Bundle.main.path(forResource: key, ofType: nil)
+                self.animationView = AnimationView(filePath: path!)
+                // URL loaded animations need to autoplay after they're loaded.
+                if autoPlay {
+                    self.animationView.play(completion: completionBlock)
+                }
+            }
+            self.animationView.loopMode = self.loopMode
         }
         
     }
