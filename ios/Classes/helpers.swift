@@ -30,7 +30,7 @@ class ColorDelegate : AnyValueProvider {
     }
     
     func hasUpdate(frame: AnimationFrameTime) -> Bool {
-        return false
+        return frame == 0
     }
 }
 
@@ -50,7 +50,7 @@ class NumberDelegate : NSObject, AnyValueProvider {
     }
     
     func hasUpdate(frame: AnimationFrameTime) -> Bool {
-        return false
+        return frame == 0
     }
 }
 

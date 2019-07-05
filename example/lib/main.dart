@@ -11,13 +11,23 @@ class MyApp extends StatefulWidget {
 }
 
 class _MyAppState extends State<MyApp> {
-
   LottieController controller;
   LottieController controller2;
+  LottieController controller3;
+  String url;
+
   StreamController<double> newProgressStream;
 
-  _MyAppState() {
+  @override
+  void initState() {
+    super.initState();
     newProgressStream = new StreamController<double>();
+
+    controller = LottieController();
+    controller2 = LottieController();
+    newProgressStream.stream.listen((double progress) {
+      controller2.setAnimationProgress(progress);
+    });
   }
 
   @override
@@ -36,36 +46,40 @@ class _MyAppState extends State<MyApp> {
                   width: 150,
                   height: 150,
                   child: LottieView.fromURL(
-                    url: "https://raw.githubusercontent.com/airbnb/lottie-ios/master/Example/Tests/Watermelon.json",
+                    "https://assets9.lottiefiles.com/datafiles/s2s8nJzgDOVLOcz/data.json",
                     autoPlay: true,
-                    loop: true,
-                    reverse: true,
-                    onViewCreated: onViewCreated,
-                  )
+                    loop: false,
+                    reverse: false,
+                    controller: controller,
+                  ),
                 ),
-                FlatButton(
-                  child: Text("Play"),
-                  onPressed: () {
-                    controller.play();
-                  },
-                ),
-                FlatButton(
-                  child: Text("Stop"),
-                  onPressed: () {
-                    controller.stop();
-                  },
-                ),
-                FlatButton(
-                  child: Text("Pause"),
-                  onPressed: () {
-                    controller.pause();
-                  },
-                ),
-                FlatButton(
-                  child: Text("Resume"),
-                  onPressed: () {
-                    controller.resume();
-                  },
+                Wrap(
+                  children: [
+                    FlatButton(
+                      child: Text("Play"),
+                      onPressed: () {
+                        controller.play();
+                      },
+                    ),
+                    FlatButton(
+                      child: Text("Stop"),
+                      onPressed: () {
+                        controller.stop();
+                      },
+                    ),
+                    FlatButton(
+                      child: Text("Pause"),
+                      onPressed: () {
+                        controller.pause();
+                      },
+                    ),
+                    FlatButton(
+                      child: Text("Resume"),
+                      onPressed: () {
+                        controller.resume();
+                      },
+                    ),
+                  ],
                 ),
                 Text("From File"),
                 Container(
@@ -73,11 +87,11 @@ class _MyAppState extends State<MyApp> {
                     width: 150,
                     height: 150,
                     child: LottieView.fromFile(
-                      filePath: "animations/newAnimation.json",
+                      "animations/newAnimation.json",
                       autoPlay: true,
-                      loop: true,
-                      reverse: true,
-                      onViewCreated: onViewCreatedFile,
+                      loop: false,
+                      reverse: false,
+                      controller: controller2,
                     ),
                   ),
                 ),
@@ -86,16 +100,12 @@ class _MyAppState extends State<MyApp> {
                   onPressed: () {
                     // Set Color of KeyPath
                     this.controller2.setValue(
-                      value: LOTColorValue.fromColor(
-                        color: Color.fromRGBO(0, 0, 255, 1)
-                      ),
-                      keyPath: "body Konturen.Gruppe 1.Fläche 1"
-                    );
+                        value: LOTColorValue.fromColor(color: Color.fromRGBO(0, 0, 255, 1)),
+                        keyPath: "body Konturen.Gruppe 1.Fläche 1");
                     // Set Opacity of KeyPath
-                    this.controller2.setValue(
-                      value: LOTOpacityValue(opacity: 0.1),
-                      keyPath: "body Konturen.Gruppe 1.Fläche 1"
-                    );
+                    this
+                        .controller2
+                        .setValue(value: LOTOpacityValue(opacity: 0.5), keyPath: "body Konturen.Gruppe 1.Fläche 1");
                   },
                 ),
                 Text("Drag anywhere to change animation progress"),
@@ -105,22 +115,6 @@ class _MyAppState extends State<MyApp> {
         ),
       ),
     );
-  }
-
-  void onViewCreated(LottieController controller) {
-    this.controller = controller;
-
-    // Listen for when the playback completes
-    this.controller.onPlayFinished.listen((bool animationFinished) {
-      print("Playback complete. Was Animation Finished? " + animationFinished.toString());
-    });
-  }
-
-  void onViewCreatedFile(LottieController controller) {
-    this.controller2 = controller;
-    newProgressStream.stream.listen((double progress) {
-      this.controller2.setAnimationProgress(progress);
-    });
   }
 
   void dispose() {

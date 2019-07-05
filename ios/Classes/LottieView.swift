@@ -42,7 +42,10 @@ public class LottieView : NSObject, FlutterPlatformView {
             
             if url != nil {
                 //TODO: figure out imageProvider
-                self.animationView = AnimationView(url: URL(string: url!)!, closure: {_ in})
+                let jsonURL = URL(string: url!)!
+                self.animationView = AnimationView(url: jsonURL,
+                                                   imageProvider: DownloadImageProvider(baseUrl: jsonURL.deletingLastPathComponent()),
+                                                   closure: {bool in return})
             }
             
             if filePath != nil {
@@ -66,6 +69,10 @@ public class LottieView : NSObject, FlutterPlatformView {
             
             // Couldn't find anything to match this
             self.onCompletion = completionBlock
+            self.animationView.loopMode = self.loopMode
+            if autoPlay {
+                self.animationView.play(completion: completionBlock)
+            }
         }
         
     }
@@ -89,12 +96,12 @@ public class LottieView : NSObject, FlutterPlatformView {
         }
         
         if call.method == "play" {
-            self.animationView?.currentProgress = 0
-            self.animationView?.play(completion: completionBlock);
+            self.animationView.currentProgress = 0
+            self.animationView.play(completion: completionBlock);
         }
         
         if call.method == "resume" {
-            self.animationView?.play(completion: completionBlock);
+            self.animationView.play(completion: completionBlock);
         }
         
         if call.method == "playWithProgress" {
@@ -222,6 +229,25 @@ public class LottieView : NSObject, FlutterPlatformView {
         default:
             break;
         }
+    }
+    
+}
+
+class DownloadImageProvider: AnimationImageProvider {
+    let baseUrl:URL
+    init(baseUrl:URL) {
+        self.baseUrl = baseUrl
+    }
+    
+    func imageForAsset(asset: ImageAsset) -> CGImage? {
+        let imageURL = baseUrl
+            .appendingPathComponent(asset.directory)
+            .appendingPathComponent(asset.name)
+        guard let data = try? Data(contentsOf: imageURL) else {
+            print("Problem downloading \(imageURL)")
+            return nil
+        }
+        return UIImage(data: data)?.cgImage
     }
     
 }
