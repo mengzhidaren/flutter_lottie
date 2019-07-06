@@ -7,20 +7,14 @@ class LottieController {
   int id;
   MethodChannel _channel;
   EventChannel _playFinished;
-  final Completer _initialized = Completer();
+  EventChannel _initialized;
+  final Completer _initializedCompleter = Completer();
   final VoidCallback onPlayFinished;
 
-  LottieController({this.onPlayFinished}) {
-    if (onPlayFinished != null) {
-      _playFinished
-          .receiveBroadcastStream()
-          .where((finished) => finished == true)
-          .listen((finished) => onPlayFinished());
-    }
-  }
+  LottieController({this.onPlayFinished});
 
   Future<LottieController> awaitInitialized() async {
-    await _initialized.future;
+    await _initializedCompleter.future;
     return this;
   }
 
@@ -29,10 +23,22 @@ class LottieController {
       throw Exception("Attempting to initialize a lottie controller twice");
     }
     this.id = id;
-    print('Creating Method Channel convictiontech/flutter_lottie_$id');
-    this._channel = new MethodChannel('convictiontech/flutter_lottie_$id');
-    this._playFinished = EventChannel('convictiontech/flutter_lottie_stream_playfinish_$id');
-    this._initialized.complete();
+    print('Creating Method Channel ${lottiePluginPath}_$id');
+    this._channel = MethodChannel('${lottiePluginPath}_$id');
+    this._playFinished = EventChannel('${lottiePluginPath}_stream_playfinish_$id');
+    this._initialized = EventChannel('${lottiePluginPath}_stream_initialized_$id');
+    if (onPlayFinished != null) {
+      _playFinished
+          .receiveBroadcastStream()
+          .where((finished) => finished == true)
+          .listen((finished) => onPlayFinished());
+    }
+
+    _initialized.receiveBroadcastStream().listen((_) {
+      if (!_initializedCompleter.isCompleted) {
+        _initializedCompleter.complete();
+      }
+    });
   }
 
   Future<void> setLoopAnimation(bool loop) async {
@@ -112,8 +118,21 @@ class LottieController {
     assert(keyPath != null);
     return _channel?.invokeMethod('setValue', {
       "value": value.value,
-      "type": value.type,
+      "type": valueType(value.type),
       "keyPath": keyPath,
     });
   }
 }
+
+String valueType(LOTValueType type) {
+  switch (type) {
+    case LOTValueType.Color:
+      return "ColorValue";
+    case LOTValueType.Opacity:
+      return "OpacityValue";
+    default:
+      return null;
+  }
+}
+
+const lottiePluginPath = "sunnyapp/flutter_lottie";

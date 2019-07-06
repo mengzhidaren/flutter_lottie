@@ -2,18 +2,6 @@ import UIKit
 import Flutter
 import Lottie
 
-public class TestStreamHandler : FlutterStreamHandler {
-    var event : FlutterEventSink?
-    public func onListen(withArguments arguments: Any?, eventSink events: @escaping FlutterEventSink) -> FlutterError? {
-        self.event = events
-        return nil;
-    }
-    
-    public func onCancel(withArguments arguments: Any?) -> FlutterError? {
-        return nil;
-    }
-}
-
 class ColorDelegate : AnyValueProvider {
     let color : CGColor
     

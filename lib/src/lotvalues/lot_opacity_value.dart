@@ -1,18 +1,13 @@
-import 'package:flutter/material.dart';
 import 'lot_value.dart';
 
 class LOTOpacityValue extends LOTValue {
-  double _value;
+  final double opacity;
 
-  LOTOpacityValue({@required double opacity}) {
-    _value = opacity;
-  }
+  LOTOpacityValue(this.opacity);
 
-  String get value {
-    return _value.toString();
-  }
+  String get value => opacity.toString();
 
-  String get type {
-    return 'OpacityValue';
+  LOTValueType get type {
+    return LOTValueType.Opacity;
   }
 }

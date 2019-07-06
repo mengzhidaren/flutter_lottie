@@ -7,12 +7,12 @@ public class LottieView : NSObject, FlutterPlatformView {
     let viewId : Int64
     
     var animationView: AnimationView!
-    var testStream : TestStreamHandler?
+    var onPlayFinished : LottieStreamHandler!
+    var onInitialized : LottieStreamHandler!
     var providers : [AnyValueProvider]
     var registrarInstance : FlutterPluginRegistrar
     
     var loopMode: LottieLoopMode!
-    var onCompletion: LottieCompletionBlock!
     
     init(_ frame: CGRect, viewId: Int64, args: Any?, registrarInstance : FlutterPluginRegistrar) {
         self.frame = frame
@@ -28,14 +28,24 @@ public class LottieView : NSObject, FlutterPlatformView {
     func create(args: Any?) {
     
         let channel : FlutterMethodChannel = FlutterMethodChannel.init(
-            name: "convictiontech/flutter_lottie_" + String(viewId),
+            name: "sunnyapp/flutter_lottie_" + String(viewId),
             binaryMessenger: self.registrarInstance.messenger())
         let handler = methodCall;
         channel.setMethodCallHandler(handler)
         
-        let testChannel = FlutterEventChannel(name: "convictiontech/flutter_lottie_stream_playfinish_"  + String(viewId), binaryMessenger: self.registrarInstance.messenger())
-        self.testStream  = TestStreamHandler()
-        testChannel.setStreamHandler(testStream as? FlutterStreamHandler & NSObjectProtocol)
+        let playFinishedChannel = FlutterEventChannel(
+            name: "sunnyapp/flutter_lottie_stream_playfinish_"  + String(viewId),
+            binaryMessenger: self.registrarInstance.messenger())
+        
+        let initializedChannel = FlutterEventChannel(
+            name: "sunnyapp/flutter_lottie_stream_initialized_"  + String(viewId),
+            binaryMessenger: self.registrarInstance.messenger())
+        
+        self.onPlayFinished = LottieStreamHandler()
+        self.onInitialized = LottieStreamHandler()
+        
+        playFinishedChannel.setStreamHandler(self.onPlayFinished as? FlutterStreamHandler & NSObjectProtocol)
+        initializedChannel.setStreamHandler(self.onInitialized as? FlutterStreamHandler & NSObjectProtocol)
         
         if let argsDict = args as? Dictionary<String, Any> {
             let url = argsDict["url"] as? String ?? nil;
@@ -52,8 +62,6 @@ public class LottieView : NSObject, FlutterPlatformView {
                 self.loopMode = .playOnce
             }
             
-            self.onCompletion = completionBlock
-            
             if url != nil {
                 //TODO: figure out imageProvider
                 let jsonURL = URL(string: url!)!
@@ -61,20 +69,22 @@ public class LottieView : NSObject, FlutterPlatformView {
                     url: jsonURL,
                     imageProvider: DownloadImageProvider(baseUrl:   jsonURL.deletingLastPathComponent()),
                     closure: {bool in
+                        self.onInitialized.append(true)
                         if autoPlay {
-                            self.animationView.play(completion: self.completionBlock)
+                            self.animationView.play(completion: self.onPlayFinished.append)
                         }
                 })
             }
             
             if filePath != nil {
-                print("THIS IS THE ID " + String(viewId) + " " + filePath!)
                 let key = self.registrarInstance.lookupKey(forAsset: filePath!)
                 let path = Bundle.main.path(forResource: key, ofType: nil)
                 self.animationView = AnimationView(filePath: path!)
                 // URL loaded animations need to autoplay after they're loaded.
+                
+                self.onInitialized.append(true)
                 if autoPlay {
-                    self.animationView.play(completion: completionBlock)
+                    self.animationView.play(completion: self.onPlayFinished.append)
                 }
             }
             self.animationView.loopMode = self.loopMode
@@ -86,13 +96,6 @@ public class LottieView : NSObject, FlutterPlatformView {
         return animationView!
     }
     
-    public func completionBlock(animationFinished : Bool) -> Void {
-        if let ev : FlutterEventSink = self.testStream!.event {
-            ev(animationFinished)
-        }
-    }
-    
-    
     func methodCall( call : FlutterMethodCall, result: FlutterResult ) {
         var props : Dictionary<String, Any>  = [String: Any]()
         
@@ -102,11 +105,11 @@ public class LottieView : NSObject, FlutterPlatformView {
         
         if call.method == "play" {
             self.animationView.currentProgress = 0
-            self.animationView.play(completion: completionBlock);
+            self.animationView.play(completion: self.onPlayFinished.append);
         }
         
         if call.method == "resume" {
-            self.animationView.play(completion: completionBlock);
+            self.animationView.play(completion: self.onPlayFinished.append);
         }
         
         if call.method == "playWithProgress" {
@@ -115,10 +118,12 @@ public class LottieView : NSObject, FlutterPlatformView {
                 self.animationView.play(fromProgress: fromProgress,
                                         toProgress: toProgress,
                                         loopMode: self.loopMode,
-                                        completion: self.completionBlock)
+                                        completion: self.onPlayFinished.append)
                     
             } else {
-                self.animationView?.play(fromProgress: 0, toProgress: toProgress, completion: completionBlock);
+                self.animationView?.play(fromProgress: 0,
+                                         toProgress: toProgress,
+                                         completion: self.onPlayFinished.append);
             }
         }
         
@@ -126,9 +131,14 @@ public class LottieView : NSObject, FlutterPlatformView {
         if call.method == "playWithFrames" {
             let toFrame = props["toFrame"] as! CGFloat;
             if let fromFrame = props["fromFrame"] as? CGFloat {
-                self.animationView.play(fromFrame: fromFrame, toFrame: toFrame, loopMode: self.loopMode, completion: self.completionBlock)
+                self.animationView.play(fromFrame: fromFrame,
+                                        toFrame: toFrame,
+                                        loopMode: self.loopMode,
+                                        completion: self.onPlayFinished.append)
             } else {
-                self.animationView.play(fromFrame: 0, toFrame: toFrame, loopMode: self.loopMode, completion: completionBlock)
+                self.animationView.play(fromFrame: 0, toFrame: toFrame,
+                                        loopMode: self.loopMode,
+                                        completion: self.onPlayFinished.append)
             }
         }
         

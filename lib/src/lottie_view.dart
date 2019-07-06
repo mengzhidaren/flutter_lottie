@@ -49,7 +49,7 @@ class _LottieViewState extends State<LottieView> {
   Widget build(BuildContext context) {
     if (defaultTargetPlatform == TargetPlatform.android) {
       return AndroidView(
-        viewType: 'convictiontech/flutter_lottie',
+        viewType: 'sunnyapp/flutter_lottie',
         creationParams: <String, dynamic>{
           "url": widget.url,
           "filePath": widget.filePath,
@@ -62,7 +62,7 @@ class _LottieViewState extends State<LottieView> {
       );
     } else if (defaultTargetPlatform == TargetPlatform.iOS) {
       return UiKitView(
-        viewType: 'convictiontech/flutter_lottie',
+        viewType: 'sunnyapp/flutter_lottie',
         creationParams: <String, dynamic>{
           "url": widget.url,
           "filePath": widget.filePath,

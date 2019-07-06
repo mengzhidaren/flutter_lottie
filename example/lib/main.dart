@@ -13,7 +13,7 @@ class MyApp extends StatefulWidget {
 class _MyAppState extends State<MyApp> {
   LottieController controller;
   LottieController controller2;
-  LottieController controller3;
+  LottieController urlController;
   String url;
 
   StreamController<double> newProgressStream;
@@ -23,10 +23,25 @@ class _MyAppState extends State<MyApp> {
     super.initState();
     newProgressStream = new StreamController<double>();
 
-    controller = LottieController();
-    controller2 = LottieController();
+    controller = LottieController(onPlayFinished: () {
+      print("Animation 1 finished playing");
+    });
+    controller.awaitInitialized().then((_) {
+      controller.play();
+    });
+    controller2 = LottieController(onPlayFinished: () {
+      print("Animation 2 finished playing");
+    });
     newProgressStream.stream.listen((double progress) {
       controller2.setAnimationProgress(progress);
+    });
+    urlController = LottieController(onPlayFinished: () {
+      print("Animation 3 finished playing");
+    });
+    final start = DateTime.now();
+    urlController.awaitInitialized().then((_) {
+      final loadTime = start.difference(DateTime.now());
+      print("URL loaded in: $loadTime");
     });
   }
 
@@ -47,7 +62,7 @@ class _MyAppState extends State<MyApp> {
                   height: 150,
                   child: LottieView.fromURL(
                     "https://assets9.lottiefiles.com/datafiles/s2s8nJzgDOVLOcz/data.json",
-                    autoPlay: true,
+                    autoPlay: false, // Starts via controller
                     loop: false,
                     reverse: false,
                     controller: controller,
@@ -100,12 +115,10 @@ class _MyAppState extends State<MyApp> {
                   onPressed: () {
                     // Set Color of KeyPath
                     this.controller2.setValue(
-                        value: LOTColorValue.fromColor(color: Color.fromRGBO(0, 0, 255, 1)),
+                        value: LOTColorValue.fromColor(Color.fromRGBO(0, 0, 255, 1)),
                         keyPath: "body Konturen.Gruppe 1.Fläche 1");
                     // Set Opacity of KeyPath
-                    this
-                        .controller2
-                        .setValue(value: LOTOpacityValue(opacity: 0.5), keyPath: "body Konturen.Gruppe 1.Fläche 1");
+                    this.controller2.setValue(value: LOTOpacityValue(0.5), keyPath: "body Konturen.Gruppe 1.Fläche 1");
                   },
                 ),
                 Text("Drag anywhere to change animation progress"),

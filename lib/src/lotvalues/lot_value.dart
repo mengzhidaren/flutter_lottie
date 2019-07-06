@@ -1,4 +1,6 @@
 abstract class LOTValue {
-  String get type;
+  LOTValueType get type;
   String get value;
 }
+
+enum LOTValueType { Color, Opacity }

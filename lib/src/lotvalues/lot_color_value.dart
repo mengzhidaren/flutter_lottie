@@ -2,23 +2,14 @@ import 'package:flutter/material.dart';
 import 'lot_value.dart';
 
 class LOTColorValue extends LOTValue {
-  Color _value;
+  final Color color;
 
-  LOTColorValue.fromHEX({@required String hex}) {
-    _value = HexColor(hex);
-  }
+  LOTColorValue.fromHex(String hex) : color = HexColor(hex);
+  LOTColorValue.fromColor(Color color) : color = color;
 
-  LOTColorValue.fromColor({@required Color color}) {
-    _value = color;
-  }
+  String get value => '0x${color.value.toRadixString(16).padLeft(8, '0')}';
 
-  String get value {
-    return '0x${_value.value.toRadixString(16).padLeft(8, '0')}';
-  }
-
-  String get type {
-    return 'ColorValue';
-  }
+  LOTValueType get type => LOTValueType.Color;
 }
 
 class HexColor extends Color {
