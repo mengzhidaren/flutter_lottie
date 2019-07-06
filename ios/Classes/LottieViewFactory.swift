@@ -16,8 +16,14 @@ public class LottieViewFactory : NSObject, FlutterPlatformViewFactory {
       return FlutterStandardMessageCodec.sharedInstance()
    }
    
-   public func create(withFrame frame: CGRect, viewIdentifier viewId: Int64, arguments args: Any?) -> FlutterPlatformView {
-      return LottieView(frame, viewId: viewId, args: args, registrarInstance: registrarInstance)
+   public func create(withFrame frame: CGRect, viewIdentifier viewId: Int64,
+                      arguments args: Any?) -> FlutterPlatformView {
+      let lottieView = try? LottieView(frame,
+                                       viewId: viewId,
+                                       args: args,
+                                       registrarInstance: registrarInstance)
+    
+      return lottieView!
    }
 }
 

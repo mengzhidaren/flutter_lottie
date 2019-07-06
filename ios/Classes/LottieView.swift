@@ -6,43 +6,37 @@ public class LottieView : NSObject, FlutterPlatformView {
     let frame : CGRect
     let viewId : Int64
     
-    var animationView: AnimationView!
-    var onPlayFinished : LottieStreamHandler!
-    var onInitialized : LottieStreamHandler!
+    let animationView: AnimationView
+    let onPlayFinished : LottieStreamHandler!
+    let onInitialized : LottieStreamHandler!
     var providers : [AnyValueProvider]
-    var registrarInstance : FlutterPluginRegistrar
+    let registrarInstance : FlutterPluginRegistrar
     
-    var loopMode: LottieLoopMode!
+    let loopMode: LottieLoopMode!
     
-    init(_ frame: CGRect, viewId: Int64, args: Any?, registrarInstance : FlutterPluginRegistrar) {
+    init(_ frame: CGRect, viewId: Int64, args: Any?, registrarInstance : FlutterPluginRegistrar) throws {
         self.frame = frame
         self.viewId = viewId
         self.registrarInstance = registrarInstance
         self.providers = []
         
-        super.init()
-        
-        self.create(args: args)
-    }
-    
-    func create(args: Any?) {
-    
         let channel : FlutterMethodChannel = FlutterMethodChannel.init(
             name: "sunnyapp/flutter_lottie_" + String(viewId),
-            binaryMessenger: self.registrarInstance.messenger())
-        let handler = methodCall;
-        channel.setMethodCallHandler(handler)
+            binaryMessenger: registrarInstance.messenger())
+        
         
         let playFinishedChannel = FlutterEventChannel(
             name: "sunnyapp/flutter_lottie_stream_playfinish_"  + String(viewId),
-            binaryMessenger: self.registrarInstance.messenger())
+            binaryMessenger: registrarInstance.messenger())
         
         let initializedChannel = FlutterEventChannel(
             name: "sunnyapp/flutter_lottie_stream_initialized_"  + String(viewId),
-            binaryMessenger: self.registrarInstance.messenger())
+            binaryMessenger: registrarInstance.messenger())
         
-        self.onPlayFinished = LottieStreamHandler()
-        self.onInitialized = LottieStreamHandler()
+        let onPlayFinished = LottieStreamHandler()
+        let onInitialized = LottieStreamHandler()
+        self.onPlayFinished = onPlayFinished
+        self.onInitialized = onInitialized
         
         playFinishedChannel.setStreamHandler(self.onPlayFinished as? FlutterStreamHandler & NSObjectProtocol)
         initializedChannel.setStreamHandler(self.onInitialized as? FlutterStreamHandler & NSObjectProtocol)
@@ -65,40 +59,48 @@ public class LottieView : NSObject, FlutterPlatformView {
             if url != nil {
                 //TODO: figure out imageProvider
                 let jsonURL = URL(string: url!)!
-                self.animationView = AnimationView(
+                var animationView: AnimationView? = nil
+                animationView = AnimationView(
                     url: jsonURL,
-                    imageProvider: DownloadImageProvider(baseUrl:   jsonURL.deletingLastPathComponent()),
+                    imageProvider: DownloadImageProvider(
+                        baseUrl:   jsonURL.deletingLastPathComponent()),
                     closure: {bool in
-                        self.onInitialized.append(true)
+                        onInitialized.append(true)
                         if autoPlay {
-                            self.animationView.play(completion: self.onPlayFinished.append)
+                            animationView?.play(completion: onPlayFinished.append)
                         }
                 })
-            }
-            
-            if filePath != nil {
+                self.animationView = animationView!
+            } else if filePath != nil {
                 let key = self.registrarInstance.lookupKey(forAsset: filePath!)
                 let path = Bundle.main.path(forResource: key, ofType: nil)
-                self.animationView = AnimationView(filePath: path!)
+                let animationView = AnimationView(filePath: path!)
                 // URL loaded animations need to autoplay after they're loaded.
                 
                 self.onInitialized.append(true)
                 if autoPlay {
-                    self.animationView.play(completion: self.onPlayFinished.append)
+                    animationView.play(completion: self.onPlayFinished.append)
                 }
+                self.animationView = animationView
+            } else {
+                throw LottieError.invalidParams
             }
             self.animationView.loopMode = self.loopMode
+        } else {
+            throw LottieError.invalidParams
         }
+        
+        super.init()
+        channel.setMethodCallHandler(self.methodCall)
         
     }
     
     public func view() -> UIView {
-        return animationView!
+        return self.animationView
     }
     
     func methodCall( call : FlutterMethodCall, result: FlutterResult ) {
         var props : Dictionary<String, Any>  = [String: Any]()
-        
         if let args = call.arguments as? Dictionary<String, Any> {
             props = args
         }
@@ -121,7 +123,7 @@ public class LottieView : NSObject, FlutterPlatformView {
                                         completion: self.onPlayFinished.append)
                     
             } else {
-                self.animationView?.play(fromProgress: 0,
+                self.animationView.play(fromProgress: 0,
                                          toProgress: toProgress,
                                          completion: self.onPlayFinished.append);
             }
@@ -219,25 +221,29 @@ public class LottieView : NSObject, FlutterPlatformView {
             let value = props["value"] as! String;
             let keyPath = props["keyPath"] as! String;
             if let type = props["type"] as? String {
-                setValue(type: type, value: value, keyPath: keyPath)
+                setValue(type: type, value: value, keyPath: keyPath, result: result)
             }
         }
     }
     
-    func setValue(type: String, value: String, keyPath: String) -> Void {
+    func setValue(type: String,
+                  value: String,
+                  keyPath: String,
+                  result:FlutterResult) -> Void {
+        
         switch type {
         case "ColorValue":
             let i = UInt32(value.dropFirst(2), radix: 16)
             let color: CGColor = hexToColor(hex8: i!);
             self.providers.append(ColorDelegate(color: color))
-            self.animationView.setValueProvider(self.providers.last!,
+            animationView.setValueProvider(self.providers.last!,
                                                 keypath: AnimationKeypath(keypath: keyPath + ".Color"))
             break;
         case "OpacityValue":
             if let n = NumberFormatter().number(from: value) {
                 let f = CGFloat(truncating: n)
                 self.providers.append(NumberDelegate(number: f))
-                self.animationView.setValueProvider(self.providers.last!,
+                animationView.setValueProvider(self.providers.last!,
                                                     keypath: AnimationKeypath(keypath: keyPath + ".Opacity"))
             }
             break;
@@ -265,4 +271,8 @@ class DownloadImageProvider: AnimationImageProvider {
         return UIImage(data: data)?.cgImage
     }
     
+}
+
+enum LottieError: Error {
+    case invalidParams
 }
